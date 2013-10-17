@@ -1,0 +1,169 @@
+import easyIO.*;
+    
+
+class Oblig3C {
+    public static void main(String args[]) {
+	if(args.length < 1) {
+	    
+	    System.out.println("Skriv inn: >java Oblig3A <tekstfil>");
+
+	} else {
+
+	    OrdAnalyse m = new OrdAnalyse();
+	    m.analyse(args[0]);
+	    
+
+	}
+	
+    }
+}
+
+class OrdAnalyse {
+
+
+    void analyse(String filnavn) {
+
+	
+	In fil = new In(filnavn);
+	//	fil.setDelimiter(", . ; : - -- ! ? ( )");
+	
+	String unikeOrd[] = new String[5000];
+	int gjentatteOrd[]= new int[unikeOrd.length];
+    
+	int cnt=0;
+	int ucnt=0;
+
+
+	while(fil.hasNext()) {
+
+	    String ord = fil.inWord().toLowerCase();
+	    
+	    if(ord != null) {
+		cnt++;
+	    }
+	    
+	    for(int i = 0; i < unikeOrd.length; i++) {
+  
+		if(unikeOrd[i] != null && ord.equals(unikeOrd[i])) { 
+		    gjentatteOrd[i]++;
+		    break;
+		}
+		else if(unikeOrd[i] == null) {
+		    unikeOrd[i] = ord;
+		    ucnt++;
+		    break;
+		 
+		}
+
+	    }
+	}
+	fil.close();
+	printResultat(unikeOrd, gjentatteOrd, cnt, ucnt );
+	printFlestForekomster(unikeOrd, gjentatteOrd, ucnt);
+       	ordPar(unikeOrd, ucnt);
+
+    }
+
+
+    void printResultat(String unikeOrd[],int gjentatteOrd[], int cnt, int ucnt) {
+	
+	Out utfil = new Out("Oppsummering.txt");
+	
+	utfil.outln("Totalt ord: " + cnt + " Unike ord: " + ucnt + ". \n\n\n");
+	utfil.outln("");
+	utfil.outln("-------------------------------------------------------");
+	
+	for(int i = 0; i< unikeOrd.length; i++) {
+	    
+	    if(unikeOrd[i] != null) {
+		
+		utfil.out(unikeOrd[i]);
+	    }
+
+		for (int j = 0; j < 5; j++) {
+		utfil.out(" ");
+
+	    }
+	    
+		utfil.outln(gjentatteOrd[i]);
+	}
+	utfil.close();
+    }
+
+
+    void printFlestForekomster(String unikeOrd[], int gjentatteOrd[], int ucnt) {
+
+	int cntr = 0;
+
+	for (int i = 0; i<unikeOrd.length; i++) {
+
+	    if(unikeOrd[i] != null && gjentatteOrd[i] > gjentatteOrd[cntr]) {
+		cntr = i;
+
+	    }
+	}
+	double tiProsent = (gjentatteOrd[cntr]*0.10);
+
+
+	System.out.println("");
+	for (int j = 0; j < unikeOrd.length; j++) {
+     
+	    if(unikeOrd[j] != null && gjentatteOrd[j] > tiProsent) {
+		
+		System.out.println("Vanlige ord: " + unikeOrd[j] + "    " + gjentatteOrd[j]+ " forekomster!");
+				
+	    }
+	}
+    }
+
+    void ordPar(String unikeOrd[], int ucnt) {
+
+	In innfil = new In("Alice.txt");
+
+	int ord1 = -1;
+	int ord2 = 0;
+	int antallPar[][] = new int[ucnt][ucnt];
+	
+       
+
+	while (innfil.hasNext()) {
+	    
+	    for (int k = 0; k < unikeOrd.length; k++){
+	    
+		String ord = innfil.inWord().toLowerCase();
+		if (unikeOrd[k].equals(ord)) {
+		
+		    ord2 = k;
+		    break;
+		}
+	    }
+
+	    if(ord2 != -1) {
+		
+		antallPar[ord1][ord2]++;
+	    }
+	    ord1 = ord2;
+
+	}
+
+
+	
+	int aliceOrd;
+	for (int i = 0; i < ucnt; i++) {
+	    
+		if (unikeOrd[i].equals("alice")) { 
+		    aliceOrd = i;
+		}
+	    }
+	System.out.println("Printer ut alle ord etter alice: ");
+
+	for (int j =1; j < ucnt; j++) {
+	    if (antallPar[aliceOrd][j] > 0)  {
+		
+		
+		System.out.println(unikeOrd[j]);
+	    }
+	}
+	innfil.close();
+    }
+}
