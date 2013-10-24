@@ -21,13 +21,13 @@ void run {
 	    
 	    else  {
 		
-		String et = linje[0];
-		String b= linje[1];
+		String etg = linje[0];
+		String rom = linje[1];
 		String saldo = linje[2];
 		String navn = linje[3];
 
-hybler[et][b] = new Hybel();
-hybler[et][b]= new Hybel.leietager = new Student();
-hybler[et][b].leietager.saldo = saldo;
+hybler[etg][rom] = new Hybel();
+hybler[etg][rom]= new Hybel.navn = new Student();
+hybler[etg][rom].navn.saldo = saldo;
     }
 }
